@@ -23,6 +23,27 @@ prime(X) :-
 %% Code for Task 2 - List Creation
 
 
+primesto(X,L) :-
+    L = [],
+    N is 1,
+    primestohelper(N,X,L).
+
+primestohelper(N,X,L) :-
+    N < X,
+    prime(N),
+    L0 = L,
+    L = [L0|N].
+
+primestohelper(N,X,L) :-
+    N1 is N + 1,
+    primestohelper(N1,X,L).
+
+    
+
+
+
+
+
 
 %% end Task 2 code
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
