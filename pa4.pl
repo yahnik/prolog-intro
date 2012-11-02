@@ -22,27 +22,19 @@ prime(X) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Code for Task 2 - List Creation
 
+primesto(X,[X|L]) :-
+    X > 0,
+    prime(X),
+    X1 is X - 1,
+    primesto(X1,L).
 
 primesto(X,L) :-
-    L = [],
-    N is 1,
-    primestohelper(N,X,L).
+    X > 0,
+    \+prime(X),
+    X1 is X - 1,
+    primesto(X1,L).
 
-primestohelper(N,X,L) :-
-    N < X,
-    prime(N),
-    L0 = L,
-    L = [L0|N].
-
-primestohelper(N,X,L) :-
-    N1 is N + 1,
-    primestohelper(N1,X,L).
-
-    
-
-
-
-
+primesto(0,[]).
 
 
 %% end Task 2 code
