@@ -46,7 +46,7 @@ primesto(0,[]).
 
 % 'herm' - find possible bottle arrangements 
 herm(Bottles,Smallest,Largest) :-
-    Bottles = [B1,B2,B3,B4,B5,B6,B7],
+    Bottles = [B1,B2,_,_,_,B6,B7],
     permutation(Bottles, [poison, poison, poison, wine, wine, ahead, back]),
 
     % rule 1: wine's left side is always poison            
@@ -65,7 +65,6 @@ herm(Bottles,Smallest,Largest) :-
    
     % rule 4: B2 is the same as B6
     B2 = B6.        
-
 
 
 % Base case - once I is 7, we are at the end of the list.
@@ -89,6 +88,127 @@ wineCheck(Bottles,I) :-
     I2 is I+1,
     wineCheck(Bottles,I2).
 
+
+
+
+%pairdiffelements(Elts,[L1,L2|[]]) :-
+    
+%matchL2(L1,L2,[]).
+%matchL2(L1,L2,[E|[]]) :-
+%    match(L1,L2,E).
+
+matchL2(L1,L2,[E|Elts]) :-
+    match(L1,L2,E).
+
+matchL2(L1,L2,[E|Elts]) :-
+    matchL2(L1,L2,Elts).
+    
+match(L1,L2,E) :-
+    not(L1 = E),
+    L2 = E.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Attempt one
+pairdiffelements(_,[]).
+
+pairdiffelements(Elts,[L1,L2|_]) :-
+    %permutation(L1,Elts),
+    %permutation(L2,Elts),
+    %write('Top L1 => '),
+    %write(L1),
+    %write('\n'),
+    %write('Top L2 => '),
+    %write(L2),
+    %write('\n'),
+
+    assignall(L1,L2,Elts,Elts).
+
+
+assignall(L1,L2,[],AllElts).
+
+assignall(L1,L2,[E|Elts],AllElts) :-
+    L1 = E,
+    write('\nCalling assignall with L1 = '),
+    write(L1),
+    write('\n'),
+    assigneach(L1,L2,AllElts),
+    assignall(L1,L2,Elts,AllElts).
+
+
+% assigneach gets called with L1 assigned a value, and a list of all values
+% to assign to L2.
+assigneach(L1,L2,[]) :-
+    write('E4 called\n').
+
+assigneach(L1,L2,[E|[]]) :-
+    write('E3 called\n'),
+    write('E3 => L1: '),
+    write(L1),
+    write('\n'),
+    write('E3 => E: '),
+    write(E),
+    write('\n'),   
+    not(L1 = E),
+    L2 = E,
+    write('E3 => L2: '),
+    write(L2),
+    write('\n'),
+    assigneach(L1,L2,[]).
+
+assigneach(L1,L2,[E|Elts]) :-
+    write('E1 called\n'),
+    write('E1 => L1: '),
+    write(L1),
+    write('\n'),
+    not(L1 = E),
+    L2 = E,
+    write('E1 => L2: '),
+    write(L2),
+    write('\n'),
+    write('E1 => ELts: '),
+    write(Elts),
+    write('\n'),
+    assigneach(L1,L2,Elts).
+    
+
+assigneach(L1,L2,[E|Elts]) :-
+    write('E2 called\n'),
+    L1 = E,
+    write('E2 => skipping pair: '),
+    write(L1),
+    write('\n'),
+    assigneach(L1,L2,Elts).
+End attempt one */
 
 %% end Task 3 code
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
