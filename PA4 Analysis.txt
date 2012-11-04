@@ -1,0 +1,16 @@
+findall([S,L], (pairdiffelements([1,2,3,4,5,6,7],[S,L]), setof(B,herm(B,S,L),AllOrders), length(AllOrders,1), nth1(1,AllOrders,List), nth1(S,List,A), A=ahead,write(List),write('\nS:'),write(S),write('\n'), nth1(7,List,B), B=back,write('\n')),AllPairs),length(AllPairs,NumAllPairs).
+[poison,wine,ahead,poison,poison,wine,back]
+S:3
+
+[poison,wine,ahead,poison,poison,wine,back]
+S:3
+
+[poison,wine,poison,ahead,poison,wine,back]
+S:4
+
+[poison,wine,poison,ahead,poison,wine,back]
+S:4
+
+AllPairs = [[3, 2], [3, 6], [4, 2], [4, 6]],
+NumAllPairs = 4.
+
