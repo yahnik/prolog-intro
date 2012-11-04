@@ -91,18 +91,34 @@ wineCheck(Bottles,I) :-
 
 
 
-%pairdiffelements(Elts,[L1,L2|[]]) :-
-    
-%matchL2(L1,L2,[]).
-%matchL2(L1,L2,[E|[]]) :-
-%    match(L1,L2,E).
 
-matchL2(L1,L2,[E|Elts]) :-
+
+% Top level call to pairdiffelements, calls another function with duplicate ELts
+% parameters.
+pairdiffelements(Elts,Labels) :-
+    pairdiffelements(Elts,Elts,Labels).
+
+% assign L1 the first value from elements, then try to match L2 with all 
+% elements.
+pairdiffelements([E|_Elts],AllElts,[L1,L2|[]]) :-
+    L1 = E,
+    matchL2(L1,L2,AllElts).
+
+% regardless if the match above was successful, make recursive call with the
+% rest of Elts.
+pairdiffelements([_E|Elts],AllElts,Labels) :-
+    pairdiffelements(Elts,AllElts,Labels).
+
+% Attempt to match all Elts to L2 given the value on L1.
+matchL2(L1,L2,[E|_Elts]) :-
     match(L1,L2,E).
 
-matchL2(L1,L2,[E|Elts]) :-
+% Regardless of whether match above worked, make recursive call to attempt to
+% match L2 with rest of elements.
+matchL2(L1,L2,[_|Elts]) :-
     matchL2(L1,L2,Elts).
     
+% Predicate to match a value to L2 knowing L1's value.
 match(L1,L2,E) :-
     not(L1 = E),
     L2 = E.
