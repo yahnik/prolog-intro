@@ -44,65 +44,50 @@ primesto(0,[]).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Code for Task 3
 
-% encoded versions of the 4 rules given in the riddle
-
-
-
-
 % 'herm' - find possible bottle arrangements 
 herm(Bottles,Smallest,Largest) :-
     Bottles = [B1,B2,B3,B4,B5,B6,B7],
     permutation(Bottles, [poison, poison, poison, wine, wine, ahead, back]),
 
     % rule 1: wine's left side is always poison            
+    wineCheck(Bottles,1),
 
     % rule 2: the ends are not move ahead and are different
-    B1 \== ahead,       
-    B7 \== ahead,
-    B1 \== B7,
-
+    not(B1 = ahead),       
+    not(B7 = ahead),
+    not(B1 = B7),
+    
     % rule 3: neither Smallest or Larest are poison
     nth1(Smallest,Bottles,S),
     nth1(Largest,Bottles,L),
-    S \== poison,
-    L \== poison,
-    %write('%%%%'),
-    wineCheck(Bottles,1),
-    %write('****'), 
-    B2 == B6.        % rule 4: B2 is the same as B6
+    not(S = poison),
+    not(L = poison),
+   
+    % rule 4: B2 is the same as B6
+    B2 = B6.        
 
 
 
+% Base case - once I is 7, we are at the end of the list.
+wineCheck(_,7).
 
+% If we have a wine bottle at index I, make sure there is poison in the bottle
+% on the left.
 wineCheck(Bottles,I) :-
-    
-    %write('I: '),
-    %write(I),
-    length(Bottles,L),
-    I < L,
     nth0(I,Bottles,B),
-    B == wine,
-    %write('4'),
+    B = wine,
     ILeft is I-1,
     nth0(ILeft,Bottles,Bleft),
-    Bleft == poison,
-    %write('5'),
+    Bleft = poison,
     I2 is I+1,
     wineCheck(Bottles,I2).
 
+% If there is no win at I, increment I and continue.
 wineCheck(Bottles,I) :-
-    %write('2'),
-    length(Bottles,L),
-    I < L,
     nth0(I,Bottles,B),
-    B \== wine,
+    not(B = wine),
     I2 is I+1,
     wineCheck(Bottles,I2).
-
-wineCheck(Bottles,I) :-
-    %write('3'),
-    length(Bottles,L),
-    I =:= L.
 
 
 %% end Task 3 code
