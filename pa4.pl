@@ -136,37 +136,58 @@ match(L1,L2,E) :-
 legal_state([X,Y,Z]) :- X>=0,Y>=0,Z>=0,X=<3,Y=<5,Z=<8.
 
 % 8->3 until 3 full
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C<Z, X2 is 3, Z2 is Z-(3-X), legal_state([X2,Y,Z2]).
+pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C<Z, X2 is 3, Z2 is Z-C, legal_state([X2,Y,Z2]).
 % 8->3 until 8 empty
 pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C>=Z, X2 is X+Z, Z2 is 0, legal_state([X2,Y,Z2]).
 % 5->3 until 3 full
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-(3-X), legal_state([X2,Y2,Z]).
+pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-C, legal_state([X2,Y2,Z]).
 % 5->3 until 5 empty
 pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C>=Y, X2 is X+Y, Y2 is 0, legal_state([X2,Y2,Z]).
 
 
 % 8->5 until 5 full
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-(5-Y), legal_state([X,Y2,Z2]).
+pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-C, legal_state([X,Y2,Z2]).
 % 8->5 until 8 empty
 pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C>=Z, Y2 is Y+Z, Z2 is 0, legal_state([X,Y2,Z2]).
 % 3->5 until 5 full
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C<X, Y2 is 3, X2 is X-(5-Y), legal_state([X2,Y2,Z]).
+pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C<X, Y2 is 5, X2 is X-C, legal_state([X2,Y2,Z]).
 % 3->5 until 3 empty
 pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C>=X, Y2 is Y+X, X2 is 0, legal_state([X2,Y2,Z]).
 
 
 % 3->8 until 8 full
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-(8-Z), legal_state([X2,Y,Z2]).
+pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-C, legal_state([X2,Y,Z2]).
 % 3->8 until 8 empty
 pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C>=X, Z2 is Z+X, X2 is 0, legal_state([X2,Y,Z2]).
 % 5->8 until 8 full
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-(8-Z), legal_state([X,Y2,Z2]).
+pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-C, legal_state([X,Y2,Z2]).
 % 5->8 until 8 empty
 pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C>=Y, Z2 is Z+Y, Y2 is 0, legal_state([X,Y2,Z2]).
 
 
+waterjug(Start,Goal) :-
+    write('Top Level Call\n'),
+    waterjug(Start,Goal,[Start|[]]).
+
+waterjug(Start,Goal,Path) :-
+    Start = Goal,
+    write('Solution is:\n'),
+    write(Path),
+    nl.
+
+waterjug(Start,Goal,Path) :-
+    not(Start = goal),
+    pour(Start,Next),
+    not(member(Next,Path)),
+    write('Next state => '),
+    write(Next),
+    nl,
+    waterjug(Next,Goal,[Next|Path]).
 
 
+
+
+/* Attempt 1
 waterjug(Start,Goal) :-
     write('Start => '),
     write(Start),
@@ -182,6 +203,7 @@ waterjug(Start,Goal) :-
     write(Next),
     write('\n'),
     waterjug(Next,Goal).
+*/
 
 %% end Task 4 code
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
