@@ -136,55 +136,60 @@ match(L1,L2,E) :-
 legal_state([X,Y,Z]) :- X>=0,Y>=0,Z>=0,X=<3,Y=<5,Z=<8.
 
 % 8->3 until 3 full
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C<Z, X2 is 3, Z2 is Z-C, legal_state([X2,Y,Z2]).
-% 8->3 until 8 empty
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C>=Z, X2 is X+Z, Z2 is 0, legal_state([X2,Y,Z2]).
-% 5->3 until 3 full
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-C, legal_state([X2,Y2,Z]).
-% 5->3 until 5 empty
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C>=Y, X2 is X+Y, Y2 is 0, legal_state([X2,Y2,Z]).
-
-
-% 8->5 until 5 full
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-C, legal_state([X,Y2,Z2]).
-% 8->5 until 8 empty
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C>=Z, Y2 is Y+Z, Z2 is 0, legal_state([X,Y2,Z2]).
-% 3->5 until 5 full
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C<X, Y2 is 5, X2 is X-C, legal_state([X2,Y2,Z]).
-% 3->5 until 3 empty
-pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C>=X, Y2 is Y+X, X2 is 0, legal_state([X2,Y2,Z]).
-
-
-% 3->8 until 8 full
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-C, legal_state([X2,Y,Z2]).
-% 3->8 until 8 empty
-pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C>=X, Z2 is Z+X, X2 is 0, legal_state([X2,Y,Z2]).
-% 5->8 until 8 full
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-C, legal_state([X,Y2,Z2]).
-% 5->8 until 8 empty
-pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C>=Y, Z2 is Z+Y, Y2 is 0, legal_state([X,Y2,Z2]).
+pour([X,Y,Z],[X2,Y,Z2],Msg) :- C is 3-X, C>0, C<Z, X2 is 3, Z2 is Z-C, legal_state([X2,Y,Z2]),
+    "Fill 3-quart from 8-quart.\n" = Msg.
+%% 8->3 until 8 empty
+%pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C>=Z, X2 is X+Z, Z2 is 0, legal_state([X2,Y,Z2]).
+%% 5->3 until 3 full
+%pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-C, legal_state([X2,Y2,Z]).
+%% 5->3 until 5 empty
+%pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C>=Y, X2 is X+Y, Y2 is 0, legal_state([X2,Y2,Z]).
+%
+%
+%% 8->5 until 5 full
+%pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-C, legal_state([X,Y2,Z2]).
+%% 8->5 until 8 empty
+%pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C>=Z, Y2 is Y+Z, Z2 is 0, legal_state([X,Y2,Z2]).
+%% 3->5 until 5 full
+%pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C<X, Y2 is 5, X2 is X-C, legal_state([X2,Y2,Z]).
+%% 3->5 until 3 empty
+%pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C>=X, Y2 is Y+X, X2 is 0, legal_state([X2,Y2,Z]).
+%
+%
+%% 3->8 until 8 full
+%pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-C, legal_state([X2,Y,Z2]).
+%% 3->8 until 8 empty
+%pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C>=X, Z2 is Z+X, X2 is 0, legal_state([X2,Y,Z2]).
+%% 5->8 until 8 full
+%pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-C, legal_state([X,Y2,Z2]).
+%% 5->8 until 8 empty
+%pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C>=Y, Z2 is Z+Y, Y2 is 0, legal_state([X,Y2,Z2]).
 
 
 waterjug(Start,Goal) :-
-    write('Top Level Call\n'),
-    waterjug(Start,Goal,[Start|[]]).
+    waterjug(Start,Goal,[Start|[]],[]).
 
-waterjug(Start,Goal,Path) :-
+waterjug(Start,Goal,Path,Moves) :-
     Start = Goal,
     write('Solution is:\n'),
-    write(Path),
-    nl.
+    printmoves(Moves).
 
-waterjug(Start,Goal,Path) :-
+waterjug(Start,Goal,Path,Moves) :-
     not(Start = goal),
-    pour(Start,Next),
+    pour(Start,Next,Msg),
     not(member(Next,Path)),
-    write('Next state => '),
-    write(Next),
-    nl,
-    waterjug(Next,Goal,[Next|Path]).
+    %write('Next state => '),
+    %write(Next),
+    %nl,
+    waterjug(Next,Goal,[Next|Path],[Msg|Moves]).
 
 
+
+printmoves([]).
+
+printmoves([M|Moves]) :-
+    writef("%s",[M]),
+    printmoves(Moves).
 
 
 /* Attempt 1
