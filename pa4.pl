@@ -137,58 +137,66 @@ legal_state([X,Y,Z]) :- X>=0,Y>=0,Z>=0,X=<3,Y=<5,Z=<8.
 
 % 8->3 until 3 full
 pour([X,Y,Z],[X2,Y,Z2],Msg) :- C is 3-X, C>0, C<Z, X2 is 3, Z2 is Z-C, legal_state([X2,Y,Z2]),
-    "Fill 3-quart from 8-quart.\n" = Msg.
-%% 8->3 until 8 empty
-%pour([X,Y,Z],[X2,Y,Z2]) :- C is 3-X, C>0, C>=Z, X2 is X+Z, Z2 is 0, legal_state([X2,Y,Z2]).
-%% 5->3 until 3 full
-%pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-C, legal_state([X2,Y2,Z]).
-%% 5->3 until 5 empty
-%pour([X,Y,Z],[X2,Y2,Z]) :- C is 3-X, C>0, C>=Y, X2 is X+Y, Y2 is 0, legal_state([X2,Y2,Z]).
-%
-%
-%% 8->5 until 5 full
-%pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-C, legal_state([X,Y2,Z2]).
-%% 8->5 until 8 empty
-%pour([X,Y,Z],[X,Y2,Z2]) :- C is 5-Y, C>0, C>=Z, Y2 is Y+Z, Z2 is 0, legal_state([X,Y2,Z2]).
-%% 3->5 until 5 full
-%pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C<X, Y2 is 5, X2 is X-C, legal_state([X2,Y2,Z]).
-%% 3->5 until 3 empty
-%pour([X,Y,Z],[X2,Y2,Z]) :- C is 5-Y, C>0, C>=X, Y2 is Y+X, X2 is 0, legal_state([X2,Y2,Z]).
-%
-%
-%% 3->8 until 8 full
-%pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-C, legal_state([X2,Y,Z2]).
-%% 3->8 until 8 empty
-%pour([X,Y,Z],[X2,Y,Z2]) :- C is 8-Z, C>0, C>=X, Z2 is Z+X, X2 is 0, legal_state([X2,Y,Z2]).
-%% 5->8 until 8 full
-%pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-C, legal_state([X,Y2,Z2]).
-%% 5->8 until 8 empty
-%pour([X,Y,Z],[X,Y2,Z2]) :- C is 8-Z, C>0, C>=Y, Z2 is Z+Y, Y2 is 0, legal_state([X,Y2,Z2]).
+    Msg = "Fill 3-quart from 8-quart.".
+% 8->3 until 8 empty
+pour([X,Y,Z],[X2,Y,Z2],Msg) :- C is 3-X, C>0, C>=Z, X2 is X+Z, Z2 is 0, legal_state([X2,Y,Z2]),
+    Msg = "Empty 8-quart into 3-quart.".
+% 5->3 until 3 full
+pour([X,Y,Z],[X2,Y2,Z],Msg) :- C is 3-X, C>0, C<Y, X2 is 3, Y2 is Y-C, legal_state([X2,Y2,Z]),
+    Msg = "Fill 3-quart from 5-quart.".
+% 5->3 until 5 empty
+pour([X,Y,Z],[X2,Y2,Z],Msg) :- C is 3-X, C>0, C>=Y, X2 is X+Y, Y2 is 0, legal_state([X2,Y2,Z]),
+    Msg = "Empty 5-quart into 3-quart.".
+
+
+% 8->5 until 5 full
+pour([X,Y,Z],[X,Y2,Z2],Msg) :- C is 5-Y, C>0, C<Z, Y2 is 5, Z2 is Z-C, legal_state([X,Y2,Z2]),
+    Msg = "Fill 5-quart from 8-quart.".
+% 8->5 until 8 empty
+pour([X,Y,Z],[X,Y2,Z2],Msg) :- C is 5-Y, C>0, C>=Z, Y2 is Y+Z, Z2 is 0, legal_state([X,Y2,Z2]),
+    Msg = "Empty 8-quart into 5-quart.".
+% 3->5 until 5 full
+pour([X,Y,Z],[X2,Y2,Z],Msg) :- C is 5-Y, C>0, C<X, Y2 is 5, X2 is X-C, legal_state([X2,Y2,Z]),
+    Msg = "Fill 5-quart from 3-quart.".
+% 3->5 until 3 empty
+pour([X,Y,Z],[X2,Y2,Z],Msg) :- C is 5-Y, C>0, C>=X, Y2 is Y+X, X2 is 0, legal_state([X2,Y2,Z]),
+    Msg = "Empty 3-quart into 5-quart.".
+
+
+% 3->8 until 8 full
+pour([X,Y,Z],[X2,Y,Z2],Msg) :- C is 8-Z, C>0, C<X, Z2 is 8, X2 is X-C, legal_state([X2,Y,Z2]),
+    Msg = "Fill 8-quart from 3-quart.".
+% 3->8 until 3 empty
+pour([X,Y,Z],[X2,Y,Z2],Msg) :- C is 8-Z, C>0, C>=X, Z2 is Z+X, X2 is 0, legal_state([X2,Y,Z2]),
+    Msg = "Empty 3-quart into 8-quart.".
+% 5->8 until 8 full
+pour([X,Y,Z],[X,Y2,Z2],Msg) :- C is 8-Z, C>0, C<Y, Z2 is 8, Y2 is Y-C, legal_state([X,Y2,Z2]),
+    Msg = "Fill 8-quart from 5-quart.".
+% 5->8 until 8 empty
+pour([X,Y,Z],[X,Y2,Z2],Msg) :- C is 8-Z, C>0, C>=Y, Z2 is Z+Y, Y2 is 0, legal_state([X,Y2,Z2]),
+    Msg = "Empty 5-quart into 8-quart.".
 
 
 waterjug(Start,Goal) :-
     waterjug(Start,Goal,[Start|[]],[]).
 
-waterjug(Start,Goal,Path,Moves) :-
+waterjug(Start,Goal,_Path,Moves) :-
     Start = Goal,
-    write('Solution is:\n'),
-    printmoves(Moves).
+    write('\nSolution is:\n'),
+    reverse(Moves,RevMoves),
+    printmoves(RevMoves).
 
 waterjug(Start,Goal,Path,Moves) :-
     not(Start = goal),
     pour(Start,Next,Msg),
     not(member(Next,Path)),
-    %write('Next state => '),
-    %write(Next),
-    %nl,
     waterjug(Next,Goal,[Next|Path],[Msg|Moves]).
-
 
 
 printmoves([]).
 
 printmoves([M|Moves]) :-
-    writef("%s",[M]),
+    writef("%s\n",[M]),
     printmoves(Moves).
 
 
